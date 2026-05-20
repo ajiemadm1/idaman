@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- JQUERY -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- SELECT2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- LOTTIE -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+
+<title>Web Input Data Maintenance</title>
+<style>
+
+
+</style>
+</head>
+<body>
+
+<div id="msgOverlay" class="msg-overlay">
+  <div id="msgBox" class="msg-box">
+
+    <div class="msg-header">
+      <span id="msgTitle">Info</span>
+      <button class="msg-close" onclick="closeMsg()">✕</button>
+    </div>
+
+    <div class="msg-body">
+      <div id="msgIcon" class="msg-icon"></div>
+      <div id="msgContent"></div>
+    </div>
+
+    <div id="msgActions" class="msg-actions"></div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toastContainer" class="toast-container"></div>
+
+<div id="timerBox">
+  <span id="globalTimer">00:00</span>
+</div>
+
+<div id="warningBox"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <span id="headerText">IDAMAN</span>
+  <div id="userArea">
+    <button id="loginBtn">Login</button>
+  </div>
+</div>Defa
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar" style="display:none">
+  <div class="sidebar-header">MENU</div>
+  <div class="sidebar-menu">
+    <!-- HOME -->
+    <div class="menu-parent" data-label="Dashboard" onclick="toggleSubMenu(this)">
+      Dashboard ▼
+    </div>
+    <div class="submenu">
+      <div class="menu-item active" onclick="showSection('dashboard1', this)">Training</div>
+    </div>
+    <!-- PARENT 1 -->
+    <div class="menu-parent" data-label="Freon" onclick="toggleSubMenu(this)">
+      Freon ▶
+    </div>
+    <!-- SUB MENU -->
+    <div class="submenu collapsed">
+      <div class="menu-item" onclick="showSection('input',this)">
+        Update Data Freon
+      </div>
+      <div class="menu-item" onclick="showSection('view',this)">
+        Upload Data Freon
+      </div>
+      <div class="menu-item" onclick="showSection('view1',this)">
+        Request Data Freon
+      </div>
+    </div>
+    <!-- PARENT 2 -->
+    <div class="menu-parent" data-label="Monitoring" onclick="toggleSubMenu(this)">
+      Monitoring ▶
+    </div>
+    <div class="submenu collapsed">
+      <div class="menu-item" onclick="showSection('monitoring1', this)">Load Center</div>
+      <div class="menu-item" onclick="showSection('monitoring2', this)">MCC Panel</div>
+    </div>
+     <!-- PARENT 3 -->
+    <div class="menu-parent" data-label="Training" onclick="toggleSubMenu(this)">
+      Training ▶
+    </div>
+    <div class="submenu collapsed">
+      <div class="menu-item" onclick="showSection('Overseas1', this)">Case 1</div>
+      <div class="menu-item" onclick="showSection('Overseas2', this)">Case 2</div>
+      <div class="menu-item" onclick="showSection('Overseas3', this)">Case 3</div>
+      <div class="menu-item" onclick="showSection('Overseas4', this)">Case 4</div>
+      <div class="menu-item" onclick="showSection('Overseas5', this)">Case 5</div>
+      <div class="menu-item" onclick="showSection('Overseas6', this)">Case 6</div>
+      <div class="menu-item" onclick="showSection('Overseas7', this)">Case 7</div>
+      <div class="menu-item" onclick="showSection('Overseas8', this)">Case 8</div>
+    </div>
+  </div>
+  <!-- SCROLL BUTTON (BOTTOM) 
+  <div class="sidebar-scroll-controls">
+    <div class="scroll-btn left" onclick="scrollMenu(-120)">◀</div>
+    <div class="scroll-btn right" onclick="scrollMenu(120)">▶</div>
+  </div>
+  -->
+</div>
+   
+<!-- MAIN -->
+<div class="main" id="mainContent" style="display:none">
+  <!-- FORM INPUT FREON TETAP UTUH -->
+  <div id="input" class="section">
+  <div class="card">
+    <h3 style="text-align:center; margin-bottom:25px;">Form Input Data Freon</h3>
+  <form id="freonForm">
+    <h4 style="margin-top:0; margin-bottom:15px;">Data Pemohon</h4>
+    <label>Seksi</label>
+    <select name="section" id="sectionSelect" class="searchable" required style="width:100%;">
+      <option value="">-- Pilih Seksi --</option>
+      <option value="MSKP">MSKP</option>
+      <option value="MSKB">MSKB</option>
+      <option value="EMP">EMP</option>
+      <option value="SJKP">SJKP</option>
+      <option value="SJKB">SJKB</option>
+      <option value="MAYP">MAYP</option>
+      <option value="MAYB">MAYB</option>
+      <option value="FL">FL</option>
+      <option value="FT">FT</option>
+      <option value="AMN">AMN</option>
+      <option value="UTZ">UTZ</option>
+      <option value="EM">EM</option>
+      <option value="GA">GA</option>
+      <option value="QA">QA</option>
+      <option value="H1S">H1S</option>
+      <option value="H1D">H1D</option>
+      <option value="H2">H2</option>
+      <option value="H4">H4</option>
+      <option value="H56">H56</option>
+      <option value="FI-2">FI-2</option>
+      <option value="UTI">UTI</option>
+      <option value="UTI_X">UTI_X</option>
+      <option value="CGS">CGS</option>
+      <option value="ITEC-Proses">ITEC-Proses</option>
+      <option value="ITEC-Project">ITEC-Project</option>
+      <option value="H0_X">H0_X</option>
+      <option value="H2_X">H2_X</option>
+      <option value="H4_X">H4_X</option>
+      <option value="H56_X">H56_X</option>
+      <option value="H7">H7</option>
+    </select>
+    <label>Departemen</label>
+    <select name="department" id="departmentSelect" class="searchable" required style="width:100%;">
+      <option value="">-- Pilih Departemen --</option>
+      <option value="FP1">FP1</option>
+      <option value="FP2">FP2</option>
+      <option value="FL">FL</option>
+      <option value="EDC">EDC</option>
+      <option value="AGRI">AGRI</option>
+      <option value="QA">QA</option>
+      <option value="GA">GA</option>
+      <option value="EM">EM</option>
+      <option value="IC">IC</option>
+      <option value="FI-2">FI-2</option>
+      <option value="UTI">UTI</option>
+      <option value="ITEC-Proses">ITEC-Proses</option>
+      <option value="ITEC-Project">ITEC-Project</option>
+      <option value="Prod NEX">Prod NEX</option>
+    </select>
+    <!-- TANGGAL -->
+    <label>Tanggal Pengajuan</label>
+      <input type="date" name="tglPengajuan" id="tglPengajuan" required>
+    <label>Tanggal Realisasi</label>
+      <input type="date" name="tglRealisasi" id="tglRealisasi" required>
+  <hr style="margin-top:30px; margin-bottom:20px; border:1px solid #ccc;">
+  <h4 style="margin-top:20px; margin-bottom:15px;">Data Unit</h4>
+      <label>Nomor Aset</label>
+      <input type="text" name="noAset" placeholder="123456789" required>
+      <label>Deskripsi</label>
+      <input type="text" name="deskripsi" placeholder="Deskripsi aset(sesuaian dengan yang diregister di SAP)" required >
+      <label>Lokasi Pendinginan</label>
+      <input type="text" name="lokasi" placeholder="Posisi ruangan yang di dinginkan" required>
+      <label>Kapasitas</label>
+      <input type="number" name="kapasitas" placeholder="Kapasitas AC dalam pK" step="any" required>
+      <label>Freon</label>
+      <select name="freon" id="freon1" class="freon-select" required style="width:100%;">
+      </select>
+      <!-- Display note -->
+      <div id="freonNote" style="margin-top:8px;font-style:italic;color:#555;white-space:pre-line;"></div>
+
+    <label>Maker</label>
+      <input type="text" name="maker" placeholder="Brand / merk AC" required>
+  <hr style="margin-top:30px; margin-bottom:20px; border:1px solid #ccc;">
+  <h4 style="margin-top:0; margin-bottom:15px;">Jenis Permintaan</h4>
+  <label>
+    <input type="radio" name="jenis" value="Penambahan Unit" required>
+    Penambahan Unit
+  </label>
+  <label>
+    <input type="radio" name="jenis" value="Penonaktifan Unit">
+    Penonaktifan Unit
+  </label>
+  <label>
+    <input type="radio" name="jenis" value="Perubahan Data" id="radioPerubahan">
+    Perubahan Data
+  </label>
+    <!-- ================= PERUBAHAN DATA ================= -->
+    <div id="perubahanSection" style="display:none; margin-top:15px; padding:10px; border:1px solid #ccc;">
+      <h5 style="margin-bottom:12px;">Pilih Item yang Diubah</h5>
+      <!-- FREON -->
+      <div style="margin-bottom:8px;">
+        <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="checkbox" id="chkFreon">
+          Freon
+        </label>
+        <div id="freonFields" style="display:none; margin-left:20px; margin-top:5px;">
+          <label style="margin-top:8px;">Freon Lama</label>
+          <select name="lamaFreon" id="freon2" class="freon-select" style="width:100%;">
+            <option value="">-- Freon Lama --</option>
+          </select>
+          <!-- Display note -->
+          <div id="freonNoteLama" style="margin-top:8px;font-style:italic;color:#555;white-space:pre-line;"></div>
+          <label style="margin-top:8px;">Freon Baru</label>
+          <select name="baruFreon" id="freon3" class="freon-select" style="width:100%;">
+            <option value="">-- Freon Baru --</option>
+          </select>
+          <div id="freonNoteBaru" style="margin-top:8px;font-style:italic;color:#555;white-space:pre-line;"></div>
+        </div>
+      </div>
+      <!-- KAPASITAS -->
+      <div style="margin-bottom:8px;">
+        <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="checkbox" id="chkKapasitas">
+          Kapasitas
+        </label>
+        <div id="kapasitasFields" style="display:none; margin-left:20px; margin-top:5px;">
+          <input type="number" name="lamaKapasitas" placeholder="Kapasitas Lama" step="any">
+          <input type="number" name="baruKapasitas" placeholder="Kapasitas Baru" step="any">
+        </div>
+      </div>
+      <!-- LOKASI -->
+      <div style="margin-bottom:8px;">
+        <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="checkbox" id="chkLokasi">
+          Lokasi
+        </label>
+        <div id="lokasiFields" style="display:none; margin-left:20px; margin-top:5px;">
+          <input type="text" name="lamaLokasi" placeholder="Lokasi Lama">
+          <input type="text" name="baruLokasi" placeholder="Lokasi Baru">
+        </div>
+      </div>
+    </div>
+    <br>
+<button type="submit">Simpan</button>
+    </form>
+    </div>
+  </div>
+
+  <!-- UPLOAD DATA FREON -->
+  <div id="view" class="section" style="display:none">
+    <div class="card"><h3 style="text-align:center; margin-bottom:25px">Upload Data Freon</h3>
+    <form id="Upl_freon_Form">
+      <label>Nomor Tiket</label>
+        <input type="text" name="noTicket" placeholder="12345678-123456-123" required>
+      <label>Pilih File (PDF/Gambar)</label>
+        <input type="file" name="freonFile" accept="application/pdf,image/*" required>
+      <button type="submit" style="margin-top:15px;">Upload</button>
+    </form>
+    </div>
+  </div>
+
+  <!-- REQUEST DATA FREON -->
+  <div id="view1" class="section" style="display:none">
+    <div class="card"><h3 style="text-align:center; margin-bottom:25px">Request Data Freon</h3>
+    <form id="Req_freon_Form">
+        <label>Seksi</label>
+      <select name="section" id="sectionSelect1" class="searchable" required style="width:100%;">
+      <option value="">-- Pilih Seksi --</option>
+      <option value="MSKP">MSKP</option>
+      <option value="MSKB">MSKB</option>
+      <option value="EMP">EMP</option>
+      <option value="SJKP">SJKP</option>
+      <option value="SJKB">SJKB</option>
+      <option value="MAYP">MAYP</option>
+      <option value="MAYB">MAYB</option>
+      <option value="FL">FL</option>
+      <option value="FT">FT</option>
+      <option value="ITEC-Project">ITEC-Project</option>
+      <option value="AMN">AMN</option>
+      <option value="UTZ">UTZ</option>
+      <option value="EM">EM</option>
+      <option value="GA">GA</option>
+      <option value="QA">QA</option>
+      <option value="H1S">H1S</option>
+      <option value="H1D">H1D</option>
+      <option value="H2">H2</option>
+      <option value="H4">H4</option>
+      <option value="H56">H56</option>
+      <option value="FI-2">FI-2</option>
+      <option value="UTI">UTI</option>
+      <option value="UTI_X">UTI_X</option>
+      <option value="CGS">CGS</option>
+      <option value="ITEC-Proses">ITEC-Proses</option>
+      <option value="H0_X">H0_X</option>
+      <option value="H2_X">H2_X</option>
+      <option value="H4_X">H4_X</option>
+      <option value="H56_X">H56_X</option>
+      <option value="H7">H7</option>
+      </select>
+      <label>Background</label>
+        <input type="text" name="Bg_Req_Freon" placeholder="Tulis alasan permintaan data" required>
+      <button type="submit" style="margin-top:15px;">Submit</button>
+    </form>
+    </div>
+  </div>
+
+  <div id="monitoring1" class="section" style="display:none">
+    <div class="card">
+      <h3 style="text-align:center; margin-bottom:25px">Monitoring Load Center Panel</h3>
+
+      <p>Loading..........</p>
+
+     <!-- nanti bisa isi table / dashboard -->
+    </div>
+  </div>
+
+  <div id="monitoring2" class="section" style="display:none">
+    <div class="card">
+      <h3 style="text-align:center; margin-bottom:25px">Monitoring MCC Panel</h3>
+
+      <p>Loading..........</p>
+
+     <!-- nanti bisa isi table / dashboard -->
+    </div>
+  </div>
+
+  <div id="Overseas1" class="section" style="display:none">
+    <div class="card">
+        <h3 style="text-align:center; margin-bottom:20px">
+          Downtime terlalu lama agitator problem karena posisi equipment yang unproper
+        </h3>
+      <hr>
+      <!-- PDF -->
+      <iframe class="pdfFrame"
+        style="width:100%;height:400px;border:1px solid #ccc;"></iframe>
+      <!-- START -->
+      <div class="startBox" style="text-align:center;margin:20px;">
+          <button class="btnStartExam" data-case="Overseas1">
+            🚀 Start Exam
+          </button>
+      </div>
+      <!-- QUESTION -->
+      <div class="questionBox"></div>
+      <!-- SUBMIT -->
+      <div id="submitBox-Overseas1" style="text-align:center;margin-top:20px;display:none;">
+        <button onclick="submitExam('Overseas1')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="Overseas2" class="section" style="display:none">
+    <div class="card">
+        <h3 style="text-align:center; margin-bottom:20px">
+          Karakteristik Pipa Non Logam
+        </h3>
+      <hr>
+      <!-- PDF -->
+      <iframe class="pdfFrame"
+        style="width:100%;height:400px;border:1px solid #ccc;"></iframe>
+      <!-- START -->
+      <div class="startBox" style="text-align:center;margin:20px;">
+        <button class="btnStartExam" data-case="Overseas2">
+            🚀 Start Exam
+        </button>
+      </div>
+      <!-- QUESTION -->
+      <div class="questionBox"></div>
+      <!-- SUBMIT -->
+      <div id="submitBox-Overseas2" style="text-align:center;margin-top:20px;display:none;">
+        <button onclick="submitExam('Overseas2')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="Overseas3" class="section" style="display:none">
+    <div class="card">
+        <h3 style="text-align:center; margin-bottom:20px">
+          Getaran Tidak Normal pada Agitator Tangki PBO Akibat Keausan Steady Bearing
+        </h3>
+      <hr>
+      <!-- PDF -->
+      <iframe class="pdfFrame"
+        style="width:100%;height:400px;border:1px solid #ccc;"></iframe>
+      <!-- START -->
+      <div class="startBox" style="text-align:center;margin:20px;">
+        <button class="btnStartExam" data-case="Overseas3">
+            🚀 Start Exam
+        </button>
+      </div>
+      <!-- QUESTION -->
+      <div class="questionBox" ></div>
+      <!-- SUBMIT -->
+      <div id="submitBox-Overseas3" style="text-align:center;margin-top:20px;display:none;">
+        <button onclick="submitExam('Overseas3')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="Overseas4" class="section" style="display:none">
+    <div class="card">
+        <h3 style="text-align:center; margin-bottom:20px">
+          Kerusakan Mechanical Seal pada Fermentor Tipe 64
+        </h3>
+      <hr>
+      <!-- PDF -->
+      <iframe class="pdfFrame"
+        style="width:100%;height:400px;border:1px solid #ccc;"></iframe>
+      <!-- START -->
+      <div class="startBox" style="text-align:center;margin:20px;">
+        <button class="btnStartExam" data-case="Overseas4">
+            🚀 Start Exam
+        </button>
+      </div>
+      <!-- QUESTION -->
+      <div class="questionBox"></div>
+      <!-- SUBMIT -->
+      <div id="submitBox-Overseas4" style="text-align:center;margin-top:20px;display:none;">
+        <button onclick="submitExam('Overseas4')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="Overseas5" class="section" style="display:none">
+    <div class="card">
+        <h3 style="text-align:center; margin-bottom:20px">
+          Discharge soda abnormal karena kondisi equipment lembab
+        </h3>
+      <hr>
+      <!-- PDF -->
+      <iframe class="pdfFrame"
+        style="width:100%;height:400px;border:1px solid #ccc;"></iframe>
+      <!-- START -->
+      <div class="startBox" style="text-align:center;margin:20px;">
+        <button class="btnStartExam" data-case="Overseas5">
+            🚀 Start Exam
+        </button>
+      </div>
+      <!-- QUESTION -->
+      <div class="questionBox"></div>
+      <!-- SUBMIT -->
+      <div id="submitBox-Overseas5" style="text-align:center;margin-top:20px;display:none;">
+        <button onclick="submitExam('Overseas5')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="Overseas6" class="section" style="display:none">
+    <div class="card">
+        <h3 style="text-align:center; margin-bottom:20px">
+          Kebocoran Grease pada Nauta Mixer
+        </h3>
+      <hr>
+      <!-- PDF -->
+      <iframe class="pdfFrame"
+        style="width:100%;height:400px;border:1px solid #ccc;"></iframe>
+      <!-- START -->
+      <div class="startBox" style="text-align:center;margin:20px;">
+        <button class="btnStartExam" data-case="Overseas6">
+            🚀 Start Exam
+        </button>
+      </div>
+      <!-- QUESTION -->
+      <div class="questionBox"></div>
+      <!-- SUBMIT -->
+      <div id="submitBox-Overseas6" style="text-align:center;margin-top:20px;display:none;">
+        <button onclick="submitExam('Overseas6')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="Overseas7" class="section" style="display:none">
+    <div class="card">
+        <h3 style="text-align:center; margin-bottom:20px">
+          Surface Condenser abnormal sehingga pompa vacuum trip
+        </h3>
+      <hr>
+      <!-- PDF -->
+      <iframe class="pdfFrame"
+        style="width:100%;height:400px;border:1px solid #ccc;"></iframe>
+      <!-- START -->
+      <div class="startBox" style="text-align:center;margin:20px;">
+        <button class="btnStartExam" data-case="Overseas7">
+            🚀 Start Exam
+        </button>
+      </div>
+      <!-- QUESTION -->
+      <div class="questionBox"></div>
+      <!-- SUBMIT -->
+      <div id="submitBox-Overseas7" style="text-align:center;margin-top:20px;display:none;">
+        <button onclick="submitExam('Overseas7')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="Overseas8" class="section" style="display:none">
+    <div class="card">
+        <h3 style="text-align:center; margin-bottom:20px">
+          Training HVAC and Refrigerant System
+        </h3>
+      <hr>
+      <!-- PDF -->
+      <iframe class="pdfFrame"
+        style="width:100%;height:400px;border:1px solid #ccc;"></iframe>
+      <!-- START -->
+      <div class="startBox" style="text-align:center;margin:20px;">
+        <button class="btnStartExam" data-case="Overseas8">
+            🚀 Start Exam
+        </button>
+      </div>
+      <!-- QUESTION -->
+      <div class="questionBox"></div>
+      <!-- SUBMIT -->
+      <div id="submitBox-Overseas8" style="text-align:center;margin-top:20px;display:none;">
+        <button onclick="submitExam('Overseas8')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="dashboard1" class="section" style="display:none">
+    <div class="card">
+      <h3 style="text-align:center; margin-bottom:25px">Dashboard Training</h3>
+        <!-- Embed Looker Studio Dashboard -->
+      <iframe
+         src="https://datastudio.google.com/embed/reporting/872610ff-5cf7-4c01-ac0e-418f6a53d57c/page/p_7v9hglpe3d"
+        width="100%"
+        height="900"
+        style="border:none; border-radius:10px;"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- LOADING SPINNER 
+<div id="loadingSpinner"><div class="spinner"></div></div> -->
+<div id="loadingSpinner">
+  <div class="loaderBox">
+    <div class="spinner"></div>
+    <div class="loaderText" id="loaderText">Loading...</div>
+  </div>
+</div>
+
+<!-- MESSAGE BOX -->
+<div id="msgBox"><button onclick="closeMsgBox()">×</button><span id="msgText"></span></div>
+
+<!-- MODALS LOGIN/SIGNUP/CHANGE tetap seperti sebelumnya -->
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('loginModal')">&times;</span>
+    <h3 style="text-align:center;color:#E60012;">Login</h3>
+    <form id="loginForm">
+      <label>Username</label><input type="text" name="username" required>
+      <label>Password</label><input type="password" name="password" required>
+      <button type="submit">Login</button>
+    </form>
+    <div class="switch" onclick="switchModal('loginModal','signUpModal')">Belum punya akun? Sign Up</div>
+  </div>
+</div>
+<!-- SIGN UP MODAL -->
+<div id="signUpModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('signUpModal')">&times;</span>
+    <h3 style="text-align:center;color:#E60012;">Sign Up</h3>
+    <form id="signUpForm">
+      <label>Username</label><input type="text" name="username" required>
+      <label>Nama</label><input type="text" name="nama" required>
+      <label>PT</label><input type="text" name="pt" required>
+      <label>Email</label><input type="email" name="email" required>
+      <label>Password</label><input type="password" name="password" required>
+      <label>Konfirmasi Password</label><input type="password" name="password2" required>
+      <button type="submit">Sign Up</button>
+    </form>
+    <div class="switch" onclick="switchModal('signUpModal','loginModal')">Sudah punya akun? Login</div>
+  </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div id="changeModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('changeModal')">&times;</span>
+    <h3 style="text-align:center;color:#E60012;">Change Password</h3>
+    <form id="changeForm">
+      <label>Password Lama</label><input type="password" name="oldPass" required>
+      <label>Password Baru</label><input type="password" name="newPass" required>
+      <label>Konfirmasi Password Baru</label><input type="password" name="newPass2" required>
+      <button type="submit">Update Password</button>
+    </form>
+  </div>
+</div>
+
+<script>
+// 🔥 RESET GLOBAL STATE (WAJIB)
+window.onblur = null;
+window.onfocus = null;
+document.oncopy = null;
+document.oncontextmenu = null;
+let activeExam = localStorage.getItem("activeExam") || null;
+let msgCallback = null;
+let msgLocked = false;
+let lastMinuteBeepInterval = null;
+let finalCountdownInterval = null;
+let audioUnlocked = false;
+let allowLeave = false;
+let violationCount = 0;
+const MAX_VIOLATION = 2;
+
+// clear event lama (jaga2)
+window.addEventListener("pageshow", function () {
+  console.log("RESET PAGE STATE");
+});
+
+const CBT = {
+  instances: {}
+};
+
+const CBT_CONFIG = {
+  Overseas1: {
+    spreadsheetId: "12ndmYZvFVNaZCMoYxCTe-jGpovo3dz5uUidvrSflCa0", // kosong = spreadsheet aktif
+    questionSheet: "Quest",
+    settingSheet: "PDF_link",
+    resultSheet: "Result",
+    resumeSheet: "Resume",
+    category: "Overseas1",
+    duration: 10 * 60
+  },
+  Overseas2: {
+    spreadsheetId: "12ndmYZvFVNaZCMoYxCTe-jGpovo3dz5uUidvrSflCa0", // kosong = spreadsheet aktif
+    questionSheet: "Quest",
+    settingSheet: "PDF_link",
+    resultSheet: "Result",
+    resumeSheet: "Resume",
+    category: "Overseas2",
+    duration: 10 * 60
+  },
+   Overseas3: {
+    spreadsheetId: "12ndmYZvFVNaZCMoYxCTe-jGpovo3dz5uUidvrSflCa0", // kosong = spreadsheet aktif
+    questionSheet: "Quest",
+    settingSheet: "PDF_link",
+    resultSheet: "Result",
+    resumeSheet: "Resume",
+    category: "Overseas3",
+    duration: 10 * 60
+  },
+   Overseas4: {
+    spreadsheetId: "12ndmYZvFVNaZCMoYxCTe-jGpovo3dz5uUidvrSflCa0", // kosong = spreadsheet aktif
+    questionSheet: "Quest",
+    settingSheet: "PDF_link",
+    resultSheet: "Result",
+    resumeSheet: "Resume",
+    category: "Overseas4",
+    duration: 10 * 60
+  },
+   Overseas5: {
+    spreadsheetId: "12ndmYZvFVNaZCMoYxCTe-jGpovo3dz5uUidvrSflCa0", // kosong = spreadsheet aktif
+    questionSheet: "Quest",
+    settingSheet: "PDF_link",
+    resultSheet: "Result",
+    resumeSheet: "Resume",
+    category: "Overseas5",
+    duration: 10 * 60
+  },
+   Overseas6: {
+    spreadsheetId: "12ndmYZvFVNaZCMoYxCTe-jGpovo3dz5uUidvrSflCa0", // kosong = spreadsheet aktif
+    questionSheet: "Quest",
+    settingSheet: "PDF_link",
+    resultSheet: "Result",
+    resumeSheet: "Resume",
+    category: "Overseas6",
+    duration: 10 * 60
+  },
+   Overseas7: {
+    spreadsheetId: "12ndmYZvFVNaZCMoYxCTe-jGpovo3dz5uUidvrSflCa0", // kosong = spreadsheet aktif
+    questionSheet: "Quest",
+    settingSheet: "PDF_link",
+    resultSheet: "Result",
+    resumeSheet: "Resume",
+    category: "Overseas7",
+    duration: 10 * 60
+  },
+    Overseas8: {
+    spreadsheetId: "12ndmYZvFVNaZCMoYxCTe-jGpovo3dz5uUidvrSflCa0", // kosong = spreadsheet aktif
+    questionSheet: "Quest",
+    settingSheet: "PDF_link",
+    resultSheet: "Result",
+    resumeSheet: "Resume",
+    category: "Overseas8",
+    duration: 20 * 60
+  },
+};
+
+
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbx623bILdV1qfg-HwT8cY05bg7Bmi8_OFTH-hi7YGvhXybhMxujpzhxrkTtFybftEiU/exec"; // ganti dengan Web App URL
+  
+var noteMap = {};
+const freonStore = {}; // multi dropdown safe storage
+let tooltipPinned = false;
+
+function showLoading(text="Loading..."){
+  document.getElementById('loadingSpinner').style.display='flex';
+  document.getElementById('loaderText').innerText = text;
+}
+function hideLoading(){
+  document.getElementById('loadingSpinner').style.display='none';
+}
+
+// ================= MODAL =================
+function closeModal(id){document.getElementById(id).style.display='none';}
+function switchModal(closeId,openId){closeModal(closeId); document.getElementById(openId).style.display='flex';}
+
+// ================= LOGIN =================
+let currentUser=null;
+document.addEventListener("click", function(e){
+
+  if(e.target && e.target.id === "loginBtn"){
+    document.getElementById('loginModal').style.display='flex';
+  }
+
+  if(!audioUnlocked){
+    unlockAudio();
+  }
+
+  if(e.target.classList.contains("btnStartExam")){
+    const caseId = e.target.dataset.case;
+    startExam(caseId);
+  }
+
+});
+document.getElementById('loginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(this).entries());
+  showLoading();
+  google.script.run.withSuccessHandler(res => {
+    hideLoading();
+    if(res.status==='success'){
+      currentUser=res.username; 
+      showUser(); 
+      closeModal('loginModal');
+      document.getElementById('sidebar').style.display='flex';
+      document.getElementById('mainContent').style.display='block';
+      // 🔥 DEFAULT PAGE
+      showSection('dashboard1', document.querySelector('.menu-item'));
+      showToast("Login berhasil!","success");
+      resumeExam();
+    } else if(res.status==='notactive'){
+      showToast("User belum aktif! Hubungi admin!","warning");
+    } else {
+      showToast("Username / Password salah!","error");
+    }
+  }).loginUser(data.username, data.password);
+});
+
+// ================= SIGN UP =================
+document.getElementById('signUpForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const data=Object.fromEntries(new FormData(this).entries());
+  if(data.password!==data.password2){
+    showToast("Password tidak cocok!","error"); 
+    return;
+  }
+  showLoading();
+  google.script.run.withSuccessHandler(res=>{
+    hideLoading();
+    if(res.status==='exist') showToast("Username sudah ada!","error");
+    else {showToast("Sign Up berhasil!","success"); switchModal('signUpModal','loginModal');}
+  }).registerUser(data);
+});
+
+// ================= CHANGE PASSWORD =================
+document.getElementById('changeForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const data=Object.fromEntries(new FormData(this).entries());
+  if(data.newPass!==data.newPass2){showToast("Password baru tidak cocok!","error"); return;}
+  showLoading();
+  google.script.run.withSuccessHandler(res=>{
+    hideLoading();
+    if(res.status==='success'){showToast("Password berhasil diubah!","success"); closeModal('changeModal');}
+    else showToast("Password lama salah!","error");
+  }).changePassword(currentUser,data.oldPass,data.newPass);
+});
+
+// ================= USER DROPDOWN =================
+function showUser(){
+  document.getElementById('userArea').innerHTML=`
+    <div class="user-dropdown" onclick="toggleDropdown()">
+      ${currentUser} ▼
+      <div class="dropdown-content" id="drop">
+        <div onclick="openChange()">Change Password</div>
+        <div onclick="logout()">Logout</div>
+      </div>
+    </div>`;
+}
+function toggleDropdown(){
+  let d=document.getElementById('drop'); d.style.display=d.style.display==='block'?'none':'block';
+}
+function openChange(){toggleDropdown(); document.getElementById('changeModal').style.display='flex';}
+function logout(){
+   currentUser = null;
+
+  localStorage.removeItem("CBT_ACTIVE"); // 🔥 reset exam
+
+  document.getElementById('userArea').innerHTML =
+    '<button id="loginBtn">Login</button>';
+
+  document.getElementById('sidebar').style.display='none';
+  document.getElementById('mainContent').style.display='none';
+}
+
+// ================= FORM FREON =================
+document.getElementById('freonForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  // ================== VALIDASI MINIMAL 1 CHECKBOX ==================
+  const section = document.getElementById('perubahanSection');
+  if(section.style.display !== 'none'){ // hanya jika section muncul
+    const chkFreon = document.getElementById('chkFreon').checked;
+    const chkKapasitas = document.getElementById('chkKapasitas').checked;
+    const chkLokasi = document.getElementById('chkLokasi').checked;
+
+    if(!chkFreon && !chkKapasitas && !chkLokasi){
+      showToast("Pilih item yang diubah!", "error");
+      return; // hentikan submit
+    }
+  }
+
+  const data = Object.fromEntries(new FormData(this).entries());
+
+  // Generate ID unik: YYYYMMDD-HHMMSS + random 3 digit
+  const now = new Date();
+  const id = now.getFullYear().toString()
+           + String(now.getMonth()+1).padStart(2,'0')
+           + String(now.getDate()).padStart(2,'0')
+           + '-'
+           + String(now.getHours()).padStart(2,'0')
+           + String(now.getMinutes()).padStart(2,'0')
+           + String(now.getSeconds()).padStart(2,'0')
+           + '-' + Math.floor(Math.random()*900+100); // random 100-999
+
+  data.id = id; // tambahkan ID ke data
+  data.user = currentUser;
+   
+  //konversi "." ke ","
+  ['kapasitas','lamaKapasitas','baruKapasitas'].forEach(field => {
+    if (data[field]) {
+      const num = Number(data[field]);
+      if (!isNaN(num)) {
+        data[field] = num.toString().replace(".", ",");
+      }
+    }
+  });
+
+  showLoading();
+  google.script.run.withSuccessHandler(res=>{
+    hideLoading();
+    if(res.status==='success'){
+      showToast("Data berhasil disimpan! ID: "+id,"success");
+      document.getElementById('freonForm').reset();
+      setDefaultTanggal();
+      $('#freonForm select').val(null).trigger('change');
+    } else {
+      showToast("Gagal menyimpan data","error");
+    }
+  }).saveDraftFreon(data); // panggil GAS
+});
+
+// ===== UPLOAD DATA =====
+document.getElementById("Upl_freon_Form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const ticketId = this.noTicket.value.trim();
+  const fileInput = this.querySelector('input[type="file"]');
+  if(!fileInput.files.length){ alert("Pilih file!"); return; }
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function(event){
+    const base64Data = event.target.result.split(',')[1];
+    showLoading(); // pakai spinner kamu
+
+    // <-- Taro fetch DI SINI
+    const payload = {
+      ticketId: ticketId,
+      fileName: file.name,
+      mimeType: file.type,
+      base64Data: base64Data
+    };
+
+    fetch(WEBAPP_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(res => {
+      hideLoading(); // sembunyikan spinner
+      if(res.status === "error"){
+        showToast(res.message,"error");
+      } else {
+        showToast("File berhasil di-upload!\nURL: "+res.url,"success");
+        document.getElementById("Upl_freon_Form").reset();
+      }
+    })
+    .catch(err => {
+      hideLoading(); // sembunyikan spinner
+      showToast("Terjadi kesalahan: "+err,"error");
+    });
+  };
+
+  reader.readAsDataURL(file);
+});
+
+// ================= REQUEST DATA FREON =================
+document.getElementById('Req_freon_Form').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const data = Object.fromEntries(new FormData(this).entries());
+  data.user = currentUser;
+
+  showLoading();
+
+  google.script.run.withSuccessHandler(res=>{
+    hideLoading();
+
+    if(res.status === 'success'){
+      showToast("Request berhasil dikirim!","success");
+      document.getElementById('Req_freon_Form').reset();
+      $('#Req_freon_Form select').val(null).trigger('change');
+    }else{
+      showToast("Gagal mengirim request","error");
+    }
+
+  }).ReqDataFreon(data);
+
+});
+
+// ===== INTERLOCK RADIO =====
+document.querySelectorAll('input[name="jenis"]').forEach(radio=>{
+  radio.addEventListener('change', function(){
+    const perubahanSection = document.getElementById('perubahanSection');
+
+    if(this.value === "Perubahan Data"){
+      perubahanSection.style.display = "block";
+    } else {
+      perubahanSection.style.display = "none";
+      resetPerubahan();
+    }
+  });
+});
+
+// ===== TOGGLE FREON =====
+document.getElementById('chkFreon').addEventListener('change', function(){
+  toggleField(this, 'freonFields');
+});
+
+// ===== TOGGLE KAPASITAS =====
+document.getElementById('chkKapasitas').addEventListener('change', function(){
+  toggleField(this, 'kapasitasFields');
+});
+
+// ===== TOGGLE LOKASI =====
+document.getElementById('chkLokasi').addEventListener('change', function(){
+  toggleField(this, 'lokasiFields');
+});
+
+// ===== RESET PERUBAHAN =====
+function resetPerubahan(){
+  ['chkFreon','chkKapasitas','chkLokasi'].forEach(id=>{
+    document.getElementById(id).checked = false;
+  });
+
+  ['freonFields','kapasitasFields','lokasiFields'].forEach(id=>{
+    const div = document.getElementById(id);
+    div.style.display="none";
+    div.querySelectorAll('input').forEach(i=>{
+      i.required=false;
+      i.value="";
+    });
+  });
+}
+
+function setDefaultTanggal() {
+  const today = new Date();
+  const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+
+  const formatDate = (d) => {
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  document.getElementById("tglPengajuan").value = formatDate(today);
+  document.getElementById("tglRealisasi").value = formatDate(nextMonth);
+}
+
+
+// ===== HEADER ANIMASI FLIP =====
+const headerTexts = ["IDAMAN", "INPUT DATA MAINTENANCE"];
+let headerIdx = 0;
+const headerEl = document.getElementById("headerText");
+
+setInterval(() => {
+  // Flip setengah
+  headerEl.style.transform = "rotateY(90deg)";
+  headerEl.style.opacity = "0";
+
+  setTimeout(() => {
+    // Ganti teks saat setengah flip
+    headerIdx = (headerIdx + 1) % headerTexts.length;
+    headerEl.textContent = headerTexts[headerIdx];
+    headerEl.style.transform = "rotateY(0deg)";
+    headerEl.style.opacity = "1";
+  }, 300); // 0.3 detik flip
+}, 3000); // ganti teks tiap 3 detik
+
+//<!-- SCRIPT TARUH DI SINI -->
+$(document).ready(function() {
+  $('.searchable').select2();
+  // 🔥 FILTER INPUT NUMBER
+  document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('keydown', function(e) {
+      if (['e','E','+','-'].includes(e.key)) {
+      e.preventDefault();
+      }
+    });
+  });
+});
+
+// ===== INISIALISASI CHECKBOX =====
+document.getElementById('chkFreon').addEventListener('change', function(){
+  toggleField(this, 'freonFields');
+});
+document.getElementById('chkKapasitas').addEventListener('change', function(){
+  toggleField(this, 'kapasitasFields');
+});
+document.getElementById('chkLokasi').addEventListener('change', function(){
+  toggleField(this, 'lokasiFields');
+});
+// ===== FUNCTION TOGGLE =====
+function toggleField(checkbox, fieldId){
+  const field = document.getElementById(fieldId);
+  const elements = field.querySelectorAll('input, select'); // include select
+
+  if(checkbox.checked){
+    field.style.display = "block";
+    elements.forEach(el => el.required = true);
+  } else {
+    field.style.display = "none";
+    elements.forEach(el => {
+      el.required = false;
+      el.value = "";
+    });
+  }
+}
+
+function loadFreon() {
+
+  showLoading();
+
+  google.script.run.withSuccessHandler(function(data) {
+
+    hideLoading();
+
+    initFreon("freon1", data);
+    initFreon("freon2", data);
+    initFreon("freon3", data);
+
+  }).getFreonListWithNotes();
+}
+
+function initFreon(selectId, data){
+
+  const $select = $('#' + selectId);
+
+  if (!$select.length) return;
+
+  $select.empty();
+
+  // ✅ TAMBAHKAN INI
+  $select.append(new Option("-- Pilih Refrigerant --", ""));
+
+  freonStore[selectId] = {};
+
+  data.forEach(item => {
+    const name = item.name || "";
+    const note = item.note || "";
+
+    if (name.trim() === "") return;
+
+    $select.append(new Option(name, name));
+    freonStore[selectId][name] = note;
+  });
+
+   console.log("freonStore:", selectId, freonStore[selectId]); // ✅ TARUH DI SINI
+
+  if ($select.hasClass("select2-hidden-accessible")) {
+    $select.select2('destroy');
+  }
+
+  $select.select2({
+    placeholder: "-- Pilih Refrigerant --",
+    allowClear: true,
+    width: '100%'
+  });
+
+  // ✅ PENTING: reset value
+  $select.val("").trigger('change');
+}
+
+let tooltip = null;
+
+$(document).ready(function(){
+  tooltip = document.getElementById('proTooltip');
+});
+
+function analyze(note) {
+
+  const text = (note || "").toLowerCase();
+  let warnings = [];
+
+  // === HELPER: PARSE NUMBER (AMAN KOMA & TITIK) ===
+  function parseNumber(val) {
+    if (!val) return 0;
+    return parseFloat(
+      val
+        .toString()
+        .replace(/\./g, "")   // hapus pemisah ribuan
+        .replace(",", ".")    // koma jadi desimal
+    );
+  }
+
+  // === ODP ===
+  const odpMatch = text.match(/odp\s*[:=]\s*([0-9.,]+)/i);
+  const odp = odpMatch ? parseNumber(odpMatch[1]) : 0;
+
+  if (odp > 0) {
+    warnings.push({ text: "OZONE DEPLETION RISK", level: 3 });
+  }
+
+  // === GWP ===
+  const gwpMatch = text.match(/gwp\s*[:=]\s*([0-9.,]+)/i);
+  const gwp = gwpMatch ? parseNumber(gwpMatch[1]) : 0;
+
+  if (gwp > 2000) {
+    warnings.push({ text: "HIGH GLOBAL WARMING POTENTIAL", level: 3 });
+  }
+
+  // === FLAMMABILITY (ASHRAE) ===
+  if (/\bA3\b/i.test(text)) {
+    warnings.push({ text: "HIGHLY FLAMMABLE (A3)", level: 3 });
+  } 
+  else if (/\bA2\b/i.test(text)) {
+    warnings.push({ text: "FLAMMABLE (A2)", level: 3 });
+  } 
+  else if (/\bA2L\b/i.test(text)) {
+    warnings.push({ text: "LOW FLAMMABLE (A2L)", level: 2 });
+  }
+
+  // === TOXICITY (ASHRAE CLASS B) ===
+  if (/\bB1\b|\bB2L\b|\bB2\b|\bB3\b/i.test(text)) {
+    warnings.push({ text: "TOXIC REFRIGERANT (CLASS B)", level: 3 });
+  }
+
+  // === OPTIONAL: BACKUP DETECTION (kalau class tidak ditulis) ===
+  if (/\br717\b|\bnh3\b|\bammonia\b/i.test(text)) {
+    warnings.push({ text: "TOXIC GAS (AMMONIA)", level: 3 });
+  }
+
+  // === FINAL RISK ===
+  let risk = "green";
+
+  if (warnings.length > 0) {
+    const maxLevel = Math.max(...warnings.map(w => w.level));
+
+    if (maxLevel === 3) risk = "red";
+    else if (maxLevel === 2) risk = "orange";
+  }
+
+  // === OUTPUT ===
+  return {
+    risk,
+    note: warnings.length
+      ? warnings.map(w => w.text).join(" | ")
+      : "SAFE"
+  };
+}
+
+function showTooltip(selectId, name) {
+
+  if (!tooltip) return; // 🔥 cegah null error
+
+  const note = freonStore?.[selectId]?.[name] || "No data";
+
+  const result = analyze(note);
+
+  tooltip.style.display = "block";
+
+  tooltip.style.borderLeft = `4px solid ${
+    result.risk === "red" ? "#ef4444" :
+    result.risk === "yellow" ? "#f59e0b" :
+    "#10b981"
+  }`;
+
+  tooltip.innerHTML = `
+  <div style="font-weight:700;margin-bottom:6px">${name}</div>
+  <div style="white-space:pre-line">${note}</div>
+  <div style="margin-top:8px">
+    <span style="
+  background:${
+    result.risk === "red" ? "#ef4444" :
+    result.risk === "orange" ? "#f59e0b" :
+    "#10b981"
+  };
+  color:white;
+  padding:4px 10px;
+  border-radius:6px;
+  font-size:11px;
+
+  white-space: nowrap;        /* ❗ tidak boleh turun */
+  overflow: hidden;           /* ❗ sembunyikan sisa */
+  text-overflow: ellipsis;    /* ❗ kasih ... */
+  display: inline-block;
+  max-width: 250px;           /* ❗ kontrol lebar */
+">
+  ${result.note}
+</span>
+  </div>
+`;
+}
+
+$(document).on('mousemove', function(e){
+
+  if (tooltipPinned) return;
+
+  const $opt = $(e.target).closest('.select2-results__option--selectable');
+  if (!$opt.length) return;
+
+  const text = $opt.text().trim();
+  if (!text || text === "-- Pilih Refrigerant --") return;
+
+  const $select = $('.select2-container--open').prev('select');
+  if (!$select.length) return;
+
+  const selectId = $select.attr('id');
+  //if (!selectId) return;
+
+  if (!['freon1','freon2','freon3'].includes(selectId)) {
+  tooltip.style.display = "none";
+  return;
+  }
+
+  console.log("hover:", text, selectId);
+
+  showTooltip(selectId, text);
+
+  const padding = 15;
+
+  const tooltipWidth = tooltip.offsetWidth;
+  const tooltipHeight = tooltip.offsetHeight;
+
+  let left = e.pageX + padding;
+  let top = e.pageY + padding;
+
+  // ❗ cek kanan layar
+  if (left + tooltipWidth > window.innerWidth) {
+    left = e.pageX - tooltipWidth - padding;
+  }
+
+// ❗ cek bawah layar
+  if (top + tooltipHeight > window.innerHeight) {
+    top = e.pageY - tooltipHeight - padding;
+  }
+
+  // ❗ kalau masih ke atas keluar layar
+  if (top < 0) top = 10;
+
+  // ❗ kalau masih ke kiri keluar layar
+  if (left < 0) left = 10;
+
+  tooltip.style.left = left + "px";
+  tooltip.style.top = top + "px";
+  
+});
+
+// PIN TOOLTIP (UPDATED)
+$(document).on('click', '[role="option"]', function () {
+  tooltipPinned = !tooltipPinned;
+});
+
+// ESC = RESET
+$(document).on('keydown', function(e){
+  if(e.key === "Escape"){
+    tooltipPinned = false;
+    tooltip.style.display = "none";
+  }
+});
+
+// HIDE SAAT LEAVE
+$(document).on('mouseleave', '.select2-container', function () {
+  if (!tooltipPinned) {
+    tooltip.style.display = "none";
+  }
+});
+
+window.addEventListener("load", function(){
+  loadFreon();
+  setDefaultTanggal();
+  initDefaultMenu();
+   // 🔥 RESET STATE BUG
+  CBT.instances = {};
+  activeExam = null;
+
+  // 🔥 PASTIKAN LOGIN BUTTON AKTIF
+  const btn = document.getElementById("loginBtn");
+  if(btn){
+    btn.disabled = false;
+    btn.style.pointerEvents = "auto";
+  }
+});
+
+function toggleSubMenu(el){
+  const submenu = el.nextElementSibling;
+
+  submenu.classList.toggle("collapsed");
+
+  const label = el.getAttribute("data-label");
+
+  el.innerHTML = submenu.classList.contains("collapsed")
+    ? label + " ▶"
+    : label + " ▼";
+
+  setTimeout(checkMenuOverflow, 200);
+}
+
+function showSection(section, el){
+
+  if(activeExam && section && section !== activeExam){
+
+  showMsg({
+    title:"Konfirmasi",
+    message:"Anda sedang mengerjakan exam.<br>Keluar = AUTO SUBMIT!<br>Lanjut Keluar?",
+    type:"confirm",
+    onOk:()=>{
+      localStorage.setItem("LAST_SECTION", section);
+      loadExamStatus(section);
+      proceedSection(section, el);
+      if(CBT.instances[activeExam]){
+          autoSubmit(activeExam, "EXIT MENU");
+      } else {
+          localStorage.removeItem("activeExam");
+          localStorage.removeItem("CBT_ACTIVE");
+      }
+    },
+    onCancel:()=>{
+      return;
+    }
+  });
+
+    return;
+  }
+
+   // simpan last page
+  localStorage.setItem("LAST_SECTION", section);
+  loadExamStatus(section);
+  proceedSection(section, el);
+
+ 
+}
+
+
+function proceedSection(section, el){
+
+  document.querySelectorAll('.section')
+    .forEach(s => s.style.display = 'none');
+
+  const target = document.getElementById(section);
+  if(target){
+    target.style.display = 'block';
+  }
+
+  document.querySelectorAll(".menu-item")
+    .forEach(i => i.classList.remove("active"));
+
+  document.querySelectorAll(".menu-parent")
+    .forEach(p => p.classList.remove("active"));
+
+  if(el) el.classList.add("active");
+
+  const parent = el?.closest(".submenu")?.previousElementSibling;
+  if(parent){
+    parent.classList.add("active");
+
+    const submenu = parent.nextElementSibling;
+    if(submenu.classList.contains("collapsed")){
+      submenu.classList.remove("collapsed");
+      parent.innerHTML = parent.innerText.replace("▶","▼");
+    }
+  }
+
+  handleSectionChange(section);
+  scrollToActive();
+}
+
+function scrollMenu(val){
+  document.getElementById("sidebarMenu")
+    .scrollBy({ top: val, behavior: "smooth" });
+}
+
+function checkMenuOverflow(){
+  const menu = document.getElementById("sidebarMenu");
+  const leftBtn = document.querySelector(".scroll-btn.left");
+  const rightBtn = document.querySelector(".scroll-btn.right");
+
+  if(!menu) return;
+
+  const overflow = menu.scrollHeight > menu.clientHeight + 5;
+
+  leftBtn.style.display = overflow ? "flex" : "none";
+  rightBtn.style.display = overflow ? "flex" : "none";
+}
+
+function scrollToActive(){
+  const active = document.querySelector(".menu-item.active");
+
+  if(active){
+    active.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+  }
+}
+
+let isDown = false;
+let startY;
+let scrollTop;
+
+
+
+function initDefaultMenu(){
+
+  // 🔥 1. COLLAPSE SEMUA SUBMENU DULU
+  document.querySelectorAll(".submenu").forEach(sub => {
+    sub.classList.add("collapsed");
+  });
+
+  document.querySelectorAll(".menu-parent").forEach(parent => {
+    const label = parent.getAttribute("data-label");
+    parent.innerHTML = label + " ▶";
+  });
+
+  // 🔥 2. SET DEFAULT MENU
+  const defaultSection = "input";
+  const defaultMenu = document.querySelector(`[onclick*="${defaultSection}"]`);
+
+  if(defaultMenu){
+
+    showSection(defaultSection, defaultMenu);
+
+    // 🔥 3. BUKA PARENT NYA
+    const parent = defaultMenu.closest(".submenu").previousElementSibling;
+    const submenu = parent.nextElementSibling;
+
+    submenu.classList.remove("collapsed");
+
+    const label = parent.getAttribute("data-label");
+    parent.innerHTML = label + " ▼";
+  }
+}
+
+function submitExam(sectionId){
+
+  const inst = CBT.instances[sectionId];
+
+  let payload = [];
+  let kosong = false;
+
+  inst.shuffled.forEach((q,i)=>{
+
+    let val = document.querySelector(
+      `input[name="${sectionId}_q${i}"]:checked`
+    );
+
+    if(!val) kosong = true;
+
+    payload.push({
+      q: q.q,
+      a: val ? val.value : ""
+    });
+
+  });
+
+  if(kosong){
+    showToast("Soal masih ada yang kosong!","warning");
+    return;
+  }
+
+  inst.examActive = false; // 🔥 penting
+  autoSubmit(sectionId,"MANUAL",payload);
+}
+
+function autoSubmit(sectionId,reason,payload=null){
+
+  const inst = CBT.instances[sectionId];
+  if(!inst) return;
+
+  // 🔒 anti double submit
+  if(inst.submitted) return;
+  inst.submitted = true;
+
+  // 🛑 stop warning
+  if(inst.stopWarning){
+    inst.stopWarning();
+  }
+  
+  document.getElementById(`submitBox-${sectionId}`).style.display = 'none';
+
+
+  if(!payload){
+    payload = inst.shuffled.map((q,i)=>{
+      let val = document.querySelector(
+        `input[name="${sectionId}_q${i}"]:checked`
+      );
+      return {
+        q:q.q,
+        a: val ? val.value : ""
+      };
+    });
+  }
+  showLoading("Submit Data .....");
+  google.script.run
+  .withSuccessHandler(function(res){
+
+    // res = {status, correct, wrong, score}
+    hideLoading();
+    showResultPopup(res.score);
+    loadExamStatus(sectionId); 
+  })
+  .saveExamDynamic({
+    config: inst.config,
+    answers: payload,
+    user: currentUser,
+    reason: reason
+  });
+
+  //alert("Submit: " + reason);
+
+  // 🔥 RESET TOTAL (BERSIH)
+  localStorage.removeItem("activeExam");
+  localStorage.removeItem("CBT_ACTIVE");
+
+  activeExam = null;
+
+  clearInterval(inst.timer);
+
+  document.getElementById("timerBox").style.display = "none";
+  document.getElementById("warningBox").classList.remove("show");
+
+  delete CBT.instances[sectionId];
+
+  const container = document.getElementById(sectionId);
+  container.querySelector(".questionBox").innerHTML = "";
+  container.querySelector(".startBox").style.display = "block";
+  
+  setLastSection(sectionId);
+
+}
+
+function startExam(sectionId){
+
+  google.script.run
+    //.withSuccessHandler(function(res){
+
+      // 🔒 BLOCK JIKA SUDAH LULUS
+     // if(res.status === "LULUS"){
+      //  showToast("Anda sudah LULUS, tidak bisa mengulang!", "error");
+     //   return;
+     // }
+
+      // lanjut ke logic lama kamu
+      proceedStartExam(sectionId);
+
+   // })
+   // .getUserBestScore(currentUser, sectionId);
+
+}
+
+function proceedStartExam(sectionId){
+
+  const cfg = CBT_CONFIG[sectionId];
+  if(!cfg){
+    showToast("Config exam tidak ditemukan!", "error");
+    return;
+  }
+
+  if(activeExam && activeExam !== sectionId){
+    showToast("⚠ Masih ada exam aktif!", "error");
+    return;
+  }
+
+  showMsg({
+    title:"Konfirmasi",
+    message:"Anda akan mengerjakan exam.<br>Manfaatkan waktu sebaik mungkin.<br>Lanjut start exam?",
+    type:"confirm",
+    onOk:()=>{
+      activeExam = sectionId;
+      localStorage.setItem("activeExam", sectionId);
+      const inst = {
+          section: sectionId,
+          config: cfg,
+          startTime: Date.now(),
+          timer: null,
+          warn: 0,
+          examActive: true
+      };
+      CBT.instances[sectionId] = inst;
+      // 🔥 SHOW GLOBAL TIMER
+      document.getElementById("timerBox").style.display = "block";
+      showLoading("Loading Exam Data...");
+      document
+      .getElementById(sectionId)
+      .querySelector(".startBox").style.display = "none";
+      loadQuestions(sectionId);
+      // 🔥 tampilkan tombol submit
+      document.getElementById(`submitBox-${sectionId}`).style.display = 'block';
+    },
+    onCancel:()=>{
+      return;
+    }
+  });
+
+}
+
+function startTimerLoop(sectionId){
+  const inst = CBT.instances[sectionId];
+
+  inst.timer = setInterval(() => {
+
+    const remainingSeconds = getRemainingSeconds(inst);
+
+    // ================= GLOBAL TIMER UPDATE =================
+    const timerBox = document.getElementById("globalTimer");
+    if(timerBox){
+      const min = Math.floor(remainingSeconds / 60);
+      const sec = remainingSeconds % 60;
+
+      timerBox.textContent =
+        `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+    }
+
+    // ================= TIME UP =================
+    if(remainingSeconds <= 0){
+      clearInterval(inst.timer);
+      autoSubmit(sectionId, "TIMER")
+    }
+
+  }, 1000);
+}
+
+function getRemainingSeconds(instance){
+  const now = Date.now();
+  const elapsed = Math.floor((now - instance.startTime) / 1000);
+  return Math.max(instance.config.duration - elapsed, 0);
+}
+
+
+
+function startWarningSystem(getRemainingSeconds){
+
+  let lastBeepMinute = null;
+
+  const tick = setInterval(()=>{
+
+    const remaining = getRemainingSeconds();
+
+    if(remaining <= 0){
+      clearInterval(tick);
+      return;
+    }
+
+    if(remaining === 180){
+      showWarning("⚠ 3 menit lagi!");
+    }
+
+    if(remaining <= 180){
+      const minute = Math.floor(remaining / 60);
+
+      if(minute !== lastBeepMinute && remaining > 10){
+        lastBeepMinute = minute;
+        playBeep();
+      }
+    }
+
+    let lastSecondBeep = null;
+
+    if(remaining <= 10){
+      if(remaining !== lastSecondBeep){
+          lastSecondBeep = remaining;
+          playBeep();
+      }
+}
+
+  },1000);
+
+  // 🔥 return function untuk stop manual
+  return () => clearInterval(tick);
+}
+
+function startMinuteBeep() {
+  stopMinuteBeep();
+
+  lastMinuteBeepInterval = setInterval(() => {
+    playBeep(800, 200); // tone pendek tiap menit (atau tiap 10 detik kalau mau lebih agresif)
+  }, 60000);
+}
+
+function stopMinuteBeep(){
+  if (typeof lastMinuteBeepInterval !== "undefined" && lastMinuteBeepInterval){
+    clearInterval(lastMinuteBeepInterval);
+    lastMinuteBeepInterval = null;
+  }
+}
+
+function startFinalCountdown(seconds) {
+  stopFinalCountdown();
+
+  let s = seconds;
+
+  finalCountdownInterval = setInterval(() => {
+    if (s <= 0) {
+      stopFinalCountdown();
+      return;
+    }
+
+    playBeep(1000, 150); // lebih cepat & tegas
+    showWarning(`⏳ ${s} detik tersisa`);
+    s--;
+
+  }, 1000);
+}
+
+function stopFinalCountdown() {
+  if (finalCountdownInterval) {
+    clearInterval(finalCountdownInterval);
+    finalCountdownInterval = null;
+  }
+}
+
+function playBeep(frequency = 800, duration = 200) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.frequency.value = frequency;
+    osc.type = "sine";
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    setTimeout(() => {
+      osc.stop();
+      ctx.close();
+    }, duration);
+
+  } catch (e) {
+    console.log("Audio not supported");
+  }
+}
+
+function saveExamState(sectionId){
+
+  const inst = CBT.instances[sectionId];
+  if(!inst) return;
+
+  localStorage.setItem("CBT_ACTIVE", JSON.stringify({
+    section: sectionId,
+    startTime: inst.startTime,
+    answers: getCurrentAnswers(sectionId)
+  }));
+}
+
+function getCurrentAnswers(sectionId){
+  const inst = CBT.instances[sectionId];
+
+  return inst.shuffled.map((q,i)=>{
+    let val = document.querySelector(
+      `input[name="${sectionId}_q${i}"]:checked`
+    );
+    return val ? val.value : "";
+  });
+}
+
+function resumeExam(){
+
+  const data = localStorage.getItem("CBT_ACTIVE");
+  if(!data) return;
+
+  const parsed = JSON.parse(data);
+  const sectionId = parsed.section;
+
+  // 🔥 START DULU (BIAR INSTANCE ADA)
+  startExam(sectionId);
+
+  setTimeout(()=>{
+
+    const inst = CBT.instances[sectionId];
+    if(!inst) return;
+
+    inst.startTime = parsed.startTime || Date.now();
+
+    // restore jawaban
+    parsed.answers.forEach((ans,i)=>{
+      if(ans){
+        const el = document.querySelector(
+          `input[name="${sectionId}_q${i}"][value="${ans}"]`
+        );
+        if(el) el.checked = true;
+      }
+    });
+
+    showSection(sectionId);
+
+  },1500);
+}
+
+function beep(){
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  osc.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.2);
+}
+
+function antiCheat(sectionId){
+
+  const inst = CBT.instances[sectionId];
+  const warnEl = document
+    .getElementById(sectionId)
+    .querySelector(".warn");
+
+  function warn(msg){
+    inst.warn++;
+    warnEl.innerText = inst.warn;
+
+    beep();
+    showToast("⚠ " + msg, "error");
+
+    if(inst.warn >= 3){
+      autoSubmit(sectionId,"CHEAT DETECTED");
+    }
+  }
+
+  document.addEventListener("copy",e=>e.preventDefault());
+  document.addEventListener("contextmenu",e=>e.preventDefault());
+
+  window.addEventListener("blur", ()=>{
+  const active = document.activeElement;
+  if(active && active.tagName === "IFRAME") return;
+  if(inst.examActive) warn("Focus hilang");
+  });
+}
+
+function loadQuestions(sectionId){
+
+  const inst = CBT.instances[sectionId];
+  const cfg = inst.config;
+
+  showLoading("Fetching Questions...");
+
+  google.script.run.withSuccessHandler(res => {
+
+    inst.questions = res.questions;
+    inst.shuffled = shuffle(res.questions);
+
+    document
+      .getElementById(sectionId)
+      .querySelector(".pdfFrame").src = res.pdfUrl;
+
+    renderQuestions(sectionId);
+
+    // 🔥 START TIMER ENGINE (GANTI SEMUA)
+    startTimerLoop(sectionId);
+    // 🔥 simpan stop function ke instance
+    inst.stopWarning = startWarningSystem(() => getRemainingSeconds(inst));
+
+  }).getExamDataDynamic(cfg);
+}
+
+function shuffle(arr){
+  return [...arr].sort(()=>Math.random()-0.5);
+}
+
+function renderQuestions(sectionId){
+  showLoading("Preparing UI...");
+  const inst = CBT.instances[sectionId];
+  const box = document
+    .getElementById(sectionId)
+    .querySelector(".questionBox");
+
+  box.innerHTML = "";
+
+  inst.shuffled.forEach((q,i)=>{
+    box.innerHTML += `
+    <div class="question-box">
+      
+      <div class="question-title">
+        <b>${i+1}. ${q.q}</b>
+      </div>
+
+      ${['A','B','C','D'].map(opt=>`
+        <label class="option-row">
+          <input 
+            type="radio" 
+            name="${sectionId}_q${i}" 
+            value="${opt}"
+          >
+          <span>${q[opt.toLowerCase()]}</span>
+        </label>
+      `).join('')}
+
+    </div>
+  ` ;
+  });
+  
+  hideLoading();
+}
+
+
+function handleSectionChange(section){
+
+  // reset semua CBT instance
+  if(CBT.instances[section]){
+    clearInterval(CBT.instances[section].timer);
+  }
+
+  // hanya jalan kalau ada config
+  if(CBT_CONFIG[section]){
+    // load PDF saja dulu
+    loadPDF(section);
+  }
+}
+
+function loadPDF(sectionId){
+
+  const cfg = CBT_CONFIG[sectionId];
+
+  google.script.run.withSuccessHandler(res => {
+
+    console.log("PDF RESULT:", res); // 🔥 CEK INI
+
+    document
+      .getElementById(sectionId)
+      .querySelector(".pdfFrame").src = res.pdfUrl;
+
+  }).getExamDataDynamic(cfg);
+}
+
+window.addEventListener("beforeunload", function (e) {
+
+  if(activeExam && section && section !== activeExam){
+
+    e.preventDefault();
+
+    // WAJIB ini (biar browser munculin confirm dialog)
+    e.returnValue = "";
+
+    return "";
+  }
+});
+
+function showWarning(text){
+  const box = document.getElementById("warningBox");
+  if(!box) return;
+
+  box.innerText = text;
+  box.classList.add("show");
+
+  clearTimeout(box._t);
+
+  box._t = setTimeout(() => {
+    box.classList.remove("show");
+  }, 3000);
+}
+
+function calculateScore(sectionId, payload){
+  const inst = CBT.instances[sectionId];
+  let benar = 0;
+  payload.forEach(ans => {
+    const soal = inst.questions.find(q => q.id === ans.id);
+    if(soal && soal.correct === ans.a){
+      benar++;
+    }
+  });
+  const total = inst.questions.length;
+  const score = Math.round((benar / total) * 100); // 🔥 proporsional
+  return {
+    benar,
+    salah: total - benar,
+    total,
+    score
+  };
+}
+
+// ================= MSG BOX =================
+function showMsg({title="Info", message="", type="info", onOk=null, onCancel=null}){
+
+  const overlay = document.getElementById("msgOverlay");
+  const box = document.getElementById("msgBox");
+  const content = document.getElementById("msgContent");
+  const actions = document.getElementById("msgActions");
+  const titleEl = document.getElementById("msgTitle");
+  const icon = document.getElementById("msgIcon");
+
+  titleEl.innerText = title;
+  content.innerHTML = message;
+  actions.innerHTML = "";
+
+  const icons = {
+    success:"✔️",
+    error:"❌",
+    warning:"⚠️",
+    info:"ℹ️"
+  };
+  icon.innerHTML = icons[type] || "ℹ️";
+
+  if(type === "confirm"){
+    actions.innerHTML = `
+      <button class="btn btn-cancel">Cancel</button>
+      <button class="btn btn-ok">OK</button>
+    `;
+
+    const btns = actions.querySelectorAll("button");
+
+    btns[0].onclick = ()=>{ closeMsg(); if(onCancel) onCancel(); };
+    btns[1].onclick = ()=>{ closeMsg(); if(onOk) onOk(); };
+
+  } else {
+    actions.innerHTML = `<button class="btn btn-ok">OK</button>`;
+    actions.querySelector("button").onclick = ()=>{
+      closeMsg();
+      if(onOk) onOk();
+    };
+  }
+
+  // cukup ini saja
+  overlay.style.display = "flex";
+
+  setTimeout(()=>box.classList.add("show"),10);
+}
+
+function closeMsg(){
+  const overlay = document.getElementById("msgOverlay");
+  const box = document.getElementById("msgBox");
+
+  box.classList.remove("show");
+
+  setTimeout(()=>{
+    overlay.style.display = "none";
+  },200);
+}
+
+// ================= TOAST =================
+function showToast(message, type="success", duration=3000){
+  const container = document.getElementById("toastContainer");
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerText = message;
+
+  container.appendChild(toast);
+
+  setTimeout(()=>toast.classList.add("show"),10);
+
+  setTimeout(()=>{
+    toast.classList.remove("show");
+    setTimeout(()=>toast.remove(),300);
+  },duration);
+}
+
+
+function getResultConfig(score){
+
+  if(score >= 100){
+    return {
+      level: "super",
+      emoji: "🤩",
+      title: "LULUS!",
+      desc: "Waw! Score kamu perfect 💯🔥",
+      sound: "super"
+    };
+  }
+
+  if(score >= 80){
+    return {
+      level: "success",
+      emoji: "😄",
+      title: "LULUS!",
+      desc: "Mantap! Pertahankan performa kamu 🔥",
+      sound: "success"
+    };
+  }
+
+  if(score >= 50){
+    return {
+      level: "neutral",
+      emoji: "😐",
+      title: "BELUM LULUS!",
+      desc: "Ayo! Lebih giat membaca lagi 👍",
+      sound: "neutral"
+    };
+  }
+
+  return {
+    level: "fail",
+    emoji: "😢",
+    title: "BELUM LULUS!",
+    desc: "Aduh! budayakan membaca 📚",
+    sound: "fail"
+  };
+}
+
+function showResultPopup(score){
+
+  const cfg = getResultConfig(score);
+
+  const popup = document.createElement("div");
+  popup.className = "result-popup";
+
+  popup.innerHTML = `
+    <div class="popup-content ${cfg.level}">
+
+      <div class="emoji ${cfg.level}">
+        ${cfg.emoji}
+      </div>
+
+      <h2>${cfg.title}</h2>
+
+      <div class="score">${score}</div>
+
+      <p class="desc">${cfg.desc}</p>
+
+      <button onclick="document.querySelector('.result-popup')?.remove()">
+        OK
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+  setTimeout(()=>{
+    playSound(cfg.sound);
+  }, 100);
+}
+
+function playSound(type){
+  const sounds = {
+    super: "https://raw.githubusercontent.com/ajiemadm1/cbt-Audio/main/sound100.mp3",
+    success: "https://raw.githubusercontent.com/ajiemadm1/cbt-Audio/main/sound80up.mp3",
+    neutral: "https://raw.githubusercontent.com/ajiemadm1/cbt-Audio/main/soundunder80.mp3",
+    fail: "https://raw.githubusercontent.com/ajiemadm1/cbt-Audio/main/sound50.mp3"
+  };
+  const audio = new Audio(sounds[type]);
+  audio.play().catch(()=>{});
+}
+
+
+function unlockAudio(){
+  const audios = document.querySelectorAll("audio");
+
+  audios.forEach(a => {
+    a.play().then(()=>{
+      a.pause();
+      a.currentTime = 0;
+    }).catch(()=>{});
+  });
+
+  audioUnlocked = true;
+}
+
+function setLastSection(section){
+  localStorage.setItem("LAST_SECTION", section);
+}
+
+function loadExamStatus(caseId){
+
+  if(!caseId || !caseId.toLowerCase().includes("overseas")){
+    return;
+  }
+
+  showLoading("Checking status...");
+
+  google.script.run
+    .withSuccessHandler(function(res){
+      hideLoading();
+      updateButtonStatus(caseId, res);
+    })
+    .getUserBestScore(currentUser, caseId);
+}
+
+function updateButtonStatus(caseId, res){
+
+  const btn = document.querySelector(
+    `.btnStartExam[data-case="${caseId}"]`
+  );
+
+  if(!btn) return;
+
+  if(res.status === "LULUS"){
+    btn.innerHTML = `LULUS (${res.maxScore})`;
+    btn.disabled = true;
+  }
+
+  else if(res.status === "BELUM"){
+    btn.innerHTML = `BELUM LULUS (${res.maxScore})`;
+    btn.disabled = false;
+  }
+
+  else {
+    btn.innerHTML = "🚀 START EXAM";
+    btn.disabled = false;
+  }
+}
+
+// Disable copy, cut, paste, select
+    ['copy', 'cut', 'paste', 'selectstart', 'dragstart'].forEach(evt => {
+      document.addEventListener(evt, e => e.preventDefault());
+    });
+
+    // Disable right click
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Disable common keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      const key = e.key.toUpperCase();
+
+      // Ctrl+C, Ctrl+X, Ctrl+V, Ctrl+P, Ctrl+S, Ctrl+U, Ctrl+A
+      if (e.ctrlKey && ['C', 'X', 'V', 'P', 'S', 'U', 'A'].includes(key)) {
+        e.preventDefault();
+        return false;
+      }
+
+      // F12, PrintScreen
+      if (key === 'F12' || key === 'PRINTSCREEN') {
+        e.preventDefault();
+
+        // Attempt to overwrite clipboard after PrintScreen
+        if (key === 'PRINTSCREEN' && navigator.clipboard) {
+          navigator.clipboard.writeText('Screenshots are disabled.');
+        }
+        return false;
+      }
+
+      // Ctrl+Shift+I / J / C (Developer Tools)
+      if (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(key)) {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    // Blur page when printing is attempted
+    window.addEventListener('beforeprint', () => {
+      document.body.innerHTML = '<h2>Printing is disabled.</h2>';
+    });
+
+
+window.onload = function(){
+  console.log("UI Ready");
+};
+
+</script>
+
+<!-- PRO TOOLTIP (WAJIB TARUH DI PALING BAWAH BODY) -->
+<div id="proTooltip"></div>
+
+
+</body>
+</html>
